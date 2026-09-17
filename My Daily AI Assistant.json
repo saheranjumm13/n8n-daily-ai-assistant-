@@ -1,0 +1,290 @@
+{
+  "name": "My Daily AI Assistant",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "04654643-5c9d-4cf5-9357-9875ba263f55",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Help me organize my daily tasks.\n\nI need to study SQL for 1 hour today.\n\nTell me:\n1. Task\n2. Category\n3. Priority\n4. Suggested schedule\n5. Next step",
+        "options": {
+          "systemMessage": "You are my personal daily productivity assistant.\n\nWhen I give you a new task:\n\n1. Understand the task.\n2. Identify the category.\n3. Identify priority.\n4. Identify deadline if provided.\n5. Save the task in Google Sheets using the available tool.\n6. Set the status to Pending.\n7. Confirm that the task was saved.\n\nCategories:\n- Study\n- Career\n- Project\n- Personal\n\nNever invent a deadline."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        352,
+        0
+      ],
+      "id": "c055b699-a36f-4ebf-8b7a-582ceb6cd435",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        192,
+        224
+      ],
+      "id": "c194d912-e90d-4296-99bb-0d002a9bfbd6",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "VUyNS1Odps540e8Z",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1M6ikokoHIcMZNMtQBS6GNB83dQGvLD2YLrgz0YVYBsI",
+          "mode": "list",
+          "cachedResultName": "AI Assistant Tasks",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1M6ikokoHIcMZNMtQBS6GNB83dQGvLD2YLrgz0YVYBsI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1M6ikokoHIcMZNMtQBS6GNB83dQGvLD2YLrgz0YVYBsI/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Task ": "Study Python",
+            "Category ": " Study",
+            "Priority ": "High",
+            "Deadline ": "Today",
+            "Status ": "Pending"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Task ",
+              "displayName": "Task ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Category ",
+              "displayName": "Category ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Priority ",
+              "displayName": "Priority ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Deadline ",
+              "displayName": "Deadline ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status ",
+              "displayName": "Status ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Created ",
+              "displayName": "Created ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        528,
+        224
+      ],
+      "id": "94152002-0abd-4fff-92a3-11207a33b3b8",
+      "name": "Append row in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "UPlSpLBYzg0VqbSn",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "Add SQL practice' then 'actually make that 2 hours"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        368,
+        240
+      ],
+      "id": "23f5ee28-8921-4c0d-bcae-f868f60230f7",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1M6ikokoHIcMZNMtQBS6GNB83dQGvLD2YLrgz0YVYBsI",
+          "mode": "list",
+          "cachedResultName": "AI Assistant Tasks",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1M6ikokoHIcMZNMtQBS6GNB83dQGvLD2YLrgz0YVYBsI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1M6ikokoHIcMZNMtQBS6GNB83dQGvLD2YLrgz0YVYBsI/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        688,
+        240
+      ],
+      "id": "96fe2c38-7291-49e7-9d5a-22812f42c7be",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "UPlSpLBYzg0VqbSn",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "cf3eff53-7eaa-42c4-9e90-648b56a8c0f6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8724a6b4c24a8e6858100bf64d6a8270e48b2dd73e81d7567d0c3f04623ec26e"
+  },
+  "nodeGroups": [],
+  "id": "vZFBV8HEVSONzEHT",
+  "tags": []
+}
